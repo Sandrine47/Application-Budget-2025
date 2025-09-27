@@ -103,6 +103,11 @@ function getFormData() {
     return null;
   }
 
+  if (amount <= 0) {
+    alert("Le montant doit être supérieur à zéro.");
+    return null;
+  }
+
   const dateObj = new Date(date);
   if (dateObj.getFullYear() !== YEAR) {
     alert("La date doit appartenir à l'année 2025.");
@@ -124,7 +129,7 @@ function render() {
   const filtered = filterTransactions();
   renderSummary(filtered);
   renderTable(filtered);
-  renderChart();
+  renderChart(filtered);
 }
 
 function filterTransactions() {
@@ -203,10 +208,10 @@ function deleteTransaction(id) {
   render();
 }
 
-function renderChart() {
+function renderChart(filtered) {
   const dataByMonth = Array.from({ length: 12 }, () => ({ income: 0, expense: 0 }));
 
-  transactions.forEach((transaction) => {
+  filtered.forEach((transaction) => {
     const monthIndex = new Date(transaction.date).getMonth();
     if (transaction.type === "income") {
       dataByMonth[monthIndex].income += transaction.amount;
